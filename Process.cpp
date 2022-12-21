@@ -25,3 +25,59 @@ void Process::info()
     cout << "RT = " << RT << " \n";
     cout << "========================= \n";
 }
+
+int Process::getId()
+{
+    return this -> id;
+}
+
+int Process::getArrivalTime()
+{
+    return this -> arrivalTime;
+}
+
+int Process::getBurstTime()
+{
+    return this -> burstTime;
+}
+
+void Process::setCompletionTime(int arg1)
+{
+    this -> completionTime = arg1;
+}
+
+int Process::getCompletionTime()
+{
+    return this -> completionTime;
+}
+
+void Process::setTAT(int arg1)
+{
+    this -> TAT = arg1;
+}
+
+int Process::getTAT()
+{
+    return this -> TAT;
+}
+
+void Process::setWT(int arg1)
+{
+    std::cout << "Setting WT to: " << arg1 <<std::endl;
+    this -> WT = arg1;
+}
+
+int Process::getWT()
+{
+    return this -> WT;
+}
+
+void Process::setRT(int arg1)
+{
+    this -> RT = arg1;
+}
+
+int Process::getRT()
+{
+    return this -> RT;
+}
