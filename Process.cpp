@@ -63,13 +63,15 @@ int Process::getTAT()
 
 void Process::setWT(int arg1)
 {
-    std::cout << "Setting WT to: " << arg1 <<std::endl;
+//    std::cout << "Setting WT to: " << arg1 <<std::endl;
     this -> WT = arg1;
+
+//    std::cout << "WT after change: " << WT << '\n';
 }
 
 int Process::getWT()
 {
-    return this -> WT;
+    return WT;
 }
 
 void Process::setRT(int arg1)

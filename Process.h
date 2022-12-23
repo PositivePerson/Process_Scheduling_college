@@ -15,7 +15,7 @@ class Process {
     int completionTime = -1;
     int TAT = -1;            // Turn Around Time
     int WT = -1;             // Waiting Time
-    int RT = -1;             // Response Time
+    int RT = -1;             // Response Time === WT in FCFS algorithm
 public:
     int counter;
 

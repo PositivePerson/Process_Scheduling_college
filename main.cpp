@@ -5,73 +5,51 @@ using namespace std;
 
 #include "Process.h"
 
-void findWT(vector<Process> processes, vector<int> bt, int wt[])
+void findTAT(vector<Process> &processes)
 {
-//    // waiting time for first process is 0
-//    wt[0] = 0;
-//
-//    // calculating waiting time
-//    for (int  i = 1; i < n ; i++ )
-//        wt[i] =  bt[i-1] + wt[i-1] ;
-
-
-    int lastEndAt=0;
-    for(auto process: processes) {
-        cout << "Running findWT loop, lastEndAt is: " << lastEndAt
-        << " | And arrivalTime is: " << process.getArrivalTime() << endl;
-
-        int difference =  lastEndAt - process.getArrivalTime();
-        if(difference >= 0) {
-            process.setWT(lastEndAt - process.getArrivalTime());
-            lastEndAt += process.getBurstTime();
-        }
-        else {
-            process.setWT(0);
-            lastEndAt += (process.getBurstTime() + -difference);
-        }
-
-    }
-}
-
-// Function to calculate turn around time
-void findTurnAroundTime( int processes[], int n, int bt[], int wt[], int tat[])
-{
-    // calculating turnaround time by adding
-    // bt[i] + wt[i]
-    for (int  i = 0; i < n ; i++)
-        tat[i] = bt[i] + wt[i];
-}
-
-//Function to calculate average time
-void findavgTime(vector<Process> processes)
-{
-    int n = processes.size();
-
-    vector<int> burstTimes;
-    for(int i=0; i<n; i++) burstTimes.push_back(processes[i].getBurstTime());
-
-    int wt[n], tat[n], total_wt = 0, total_tat = 0;
-
-    //find Waiting Times
-    findWT(processes, burstTimes, wt);
-
-    //Function to find turn around time for all processes
-//    findTurnAroundTime(processes, n, burstTimes, wt, tat);
-
-    //Display processes along with all details
-    cout << "Process id  " << " Arrival time  "<< " Burst time  " << " Waiting time  " << " Turn around time\n";
-
-    // Calculate total waiting time and total turn
-    // around time
-    for (int  i=0; i<n; i++)
+    for(auto & process: processes)
     {
-        total_wt = total_wt + wt[i];
-        total_tat = total_tat + tat[i];
-        cout << "   " << processes[i].getId() << "\t\t" << processes[i].getArrivalTime() << "\t\t" << burstTimes[i] <<"\t    " << processes[i].getWT() <<"\t\t  " << tat[i] <<endl;
+        int temp = process.getCompletionTime() - process.getArrivalTime();
+        process.setTAT(temp);
     }
+}
 
-    cout << "Average waiting time = " << (float)total_wt / (float)n;
-    cout << "\nAverage turn around time = " << (float)total_tat / (float)n;
+void findCTandWT(vector<Process> &processes)
+{
+    int nextStartAt=0;
+    for(auto & process: processes)
+    {
+//        cout << "Running findCTandWT loop, lastEndAt: " << nextStartAt
+//        << " | arrivalTime: " << process.getArrivalTime() << endl;
+
+        int difference =  nextStartAt - process.getArrivalTime();
+
+        if(difference >= 0) { // Brak przerwy w czasie między zadaniami
+            process.setWT(nextStartAt - process.getArrivalTime());
+            nextStartAt += process.getBurstTime();
+        }
+        else { // Wystapiła przerwa w czasie między zadaniami
+            process.setWT(0);
+            nextStartAt += (process.getBurstTime() + -difference);
+        }
+
+        process.setCompletionTime(nextStartAt);
+    }
+}
+
+void displayAll(vector<Process> processes)
+{
+    cout << "Process id  " << " Arrival time  "<< " Burst time  " << " | " << " Completion time  " << " Turn around time " << " Waiting time\n";
+    for (Process process : processes)
+    {
+        cout    << "   " << process.getId()
+                << "\t\t" << process.getArrivalTime()
+                << "\t\t" << process.getBurstTime()
+                << "\t | "
+                << "\t    " << process.getCompletionTime()
+                <<"\t\t    " << process.getTAT()
+                <<"\t\t    " << process.getWT() <<endl;
+    }
 }
 
 int main()
@@ -81,21 +59,20 @@ int main()
     Process b = Process(1, 1, 2);
     Process d = Process(3, 6, 4);
 
-    vector<Process> collection = {a, b, c, d};
-    std::sort(collection.begin(), collection.end(),
+    vector<Process> processes = {a, b, c, d};
+    std::sort(processes.begin(), processes.end(),
          [](Process& f, Process& s)
     {
         return f.getArrivalTime() < s.getArrivalTime();
     });
 
-    cout << "Sorted:\n";
-    for (auto proc: collection) {
-        std::cout << "Process id: " << proc.getId() << std::endl;
-    }
-//
-//    //Burst time of all processes
-//    int  burst_time[] = {10, 5, 8};
-//
-    findavgTime(collection);
+    cout << "-Sorted- Ids:\n";
+    for (auto proc: processes) cout << "Process id: " << proc.getId() << '\n';
+    cout << '\n';
+
+    findCTandWT(processes);
+    findTAT(processes);
+
+    displayAll(processes);
     return 0;
 }
