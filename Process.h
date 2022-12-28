@@ -9,21 +9,30 @@
 #include <vector>
 
 class Process {
-    int id;
+    int id = -1;
+    int progress = -1;
     int arrivalTime;
     int burstTime;
     int completionTime = -1;
     int TAT = -1;            // Turn Around Time
     int WT = -1;             // Waiting Time
-    int RT = -1;             // Response Time === WT in FCFS algorithm
+    int RT = 0;              // Response Time == 0 in LCFS
+    //---------------------- // (because we get CPU attention as soon as process arrive)
 public:
     int counter;
 
 //    Process();
-    Process(int arg1, int arg2, int arg3);
+    Process(int _id, int _arrivalTime, int _burstTime);
+    Process(int _arrivalTime, int _burstTime);
 //    ~Process();
 
     void info();
+
+    void setProgress(int _value);
+
+    int getProgress();
+
+    void setId(int _id);
 
     int getId();
 
@@ -31,16 +40,20 @@ public:
 
     int getBurstTime();
 
-    void setCompletionTime(int arg1);
+    void setCompletionTime(int _value);
+
     int getCompletionTime();
 
-    void setTAT(int arg1);
+    void setTAT(int _value);
+
     int getTAT();
 
-    void setWT(int arg1);
+    void setWT(int _value);
+
     int getWT();
 
-    void setRT(int arg1);
+    void setRT(int _value);
+
     int getRT();
 };
 

@@ -4,6 +4,7 @@
 using namespace std;
 
 #include "Process.h"
+#include "generator.h"
 
 void findTAT(vector<Process> &processes)
 {
@@ -24,11 +25,11 @@ void findCTandWT(vector<Process> &processes)
 
         int difference =  nextStartAt - process.getArrivalTime();
 
-        if(difference >= 0) { // Brak przerwy w czasie między zadaniami
+        if(difference >= 0) { // Continuous running CPU
             process.setWT(nextStartAt - process.getArrivalTime());
             nextStartAt += process.getBurstTime();
         }
-        else { // Wystapiła przerwa w czasie między zadaniami
+        else { // Interval between processes occured
             process.setWT(0);
             nextStartAt += (process.getBurstTime() + -difference);
         }
@@ -54,21 +55,13 @@ void displayAll(vector<Process> processes)
 
 int main()
 {
-    Process a = Process(0, 0, 2);
-    Process c = Process(2, 5, 3);
-    Process b = Process(1, 1, 2);
-    Process d = Process(3, 6, 4);
+//    Process a = Process(0, 0, 2);
+//    Process c = Process(2, 5, 3);
+//    Process b = Process(1, 1, 2);
+//    Process d = Process(3, 6, 4);
 
-    vector<Process> processes = {a, b, c, d};
-    std::sort(processes.begin(), processes.end(),
-         [](Process& f, Process& s)
-    {
-        return f.getArrivalTime() < s.getArrivalTime();
-    });
-
-    cout << "-Sorted- Ids:\n";
-    for (auto proc: processes) cout << "Process id: " << proc.getId() << '\n';
-    cout << '\n';
+//    vector<Process> processes = {a, b, c, d};
+    vector<Process> processes = generate(5);
 
     findCTandWT(processes);
     findTAT(processes);
